@@ -37,7 +37,7 @@ impl Client {
 	}
 
 	/// Performs an OAuth request to twitch
-	pub async fn request_oauth<R: OAuthRequest + Send>(&mut self, request: R) -> Result<R::Output, RequestError> {
+	pub async fn request_oauth<R: OAuthRequest + Send + Sync>(&mut self, request: &R) -> Result<R::Output, RequestError> {
 		// Get url
 		let url = request.url();
 
@@ -57,7 +57,7 @@ impl Client {
 	}
 
 	/// Performs a request to Helix
-	pub async fn request_helix<R: HelixRequest + Send + Sync>(&mut self, request: R, client_id: &str) -> Result<R::Output, RequestError> {
+	pub async fn request_helix<R: HelixRequest + Send + Sync>(&mut self, request: &R, client_id: &str) -> Result<R::Output, RequestError> {
 		// Get url
 		let url = request.url();
 

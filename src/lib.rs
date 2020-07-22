@@ -19,6 +19,7 @@
 #![allow(clippy::missing_errors_doc)]
 
 // Modules
+pub mod games;
 pub mod oauth;
 pub mod request;
 pub mod response;

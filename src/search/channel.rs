@@ -31,6 +31,25 @@ impl Request {
 			live_only: None,
 		}
 	}
+
+	/// Returns the specific channel found by this request's
+	/// response
+	///
+	/// It attempts to exact match any channel in the output
+	/// with the request, if found, it is returned, else
+	/// `None` is returned.
+	#[must_use]
+	pub fn channel<'a>(&self, output: &'a Output) -> Option<&'a Channel> {
+		// Check every channel in the response
+		for channel in &output.data {
+			if unicase::eq(&self.query, &channel.display_name) {
+				return Some(channel);
+			}
+		}
+
+		// If we get here, no channel was found
+		None
+	}
 }
 
 impl HelixRequest for Request {
