@@ -15,14 +15,18 @@
 #![allow(clippy::implicit_return)]
 // We shadow variables, as long as they have the same meaning
 #![allow(clippy::shadow_reuse)]
+// We have fine-grained error types, which are self-explanatory
+#![allow(clippy::missing_errors_doc)]
 
 // Modules
+pub mod oauth;
 pub mod request;
 pub mod response;
 pub mod search;
 #[macro_use]
 pub mod url;
+pub mod client;
 
 // Exports
-pub use request::{HelixRequest, RequestHttpMethod};
+pub use request::{HelixRequest, OAuthRequest};
 pub use response::HelixResponse;

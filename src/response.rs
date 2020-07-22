@@ -11,7 +11,7 @@ pub enum HelixResponse<T> {
 	/// Error
 	Err {
 		/// Error
-		error: String,
+		error: Option<String>,
 
 		/// Status
 		status: usize,

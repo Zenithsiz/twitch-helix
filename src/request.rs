@@ -1,7 +1,10 @@
 //! Helix request trait
 
+// Imports
+use reqwest as req;
+
 /// A Helix request
-pub trait HelixRequest: Send {
+pub trait HelixRequest {
 	/// Output type
 	type Output: for<'de> serde::Deserialize<'de>;
 
@@ -9,18 +12,14 @@ pub trait HelixRequest: Send {
 	fn url(&self) -> url::Url;
 
 	/// Returns the request's http method
-	fn http_method(&self) -> RequestHttpMethod;
+	fn http_method(&self) -> req::Method;
 }
 
-/// Request http method
-#[derive(PartialEq, Eq, Clone, Copy, Debug)]
-pub enum RequestHttpMethod {
-	/// `PUT` method
-	Put,
+/// An OAuth request
+pub trait OAuthRequest {
+	/// Output type
+	type Output: for<'de> serde::Deserialize<'de>;
 
-	/// `GET` method
-	Get,
-
-	/// `POST` method
-	Post,
+	/// Returns this request's url
+	fn url(&self) -> url::Url;
 }

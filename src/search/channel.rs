@@ -1,7 +1,8 @@
 //! Channel search request
 
 // Imports
-use crate::{helix_url, response::Pagination, HelixRequest, RequestHttpMethod};
+use crate::{helix_url, response::Pagination, HelixRequest};
+use reqwest as req;
 
 /// Channel search request
 #[derive(PartialEq, Eq, Clone, Debug)]
@@ -41,8 +42,8 @@ impl HelixRequest for Request {
 		url
 	}
 
-	fn http_method(&self) -> RequestHttpMethod {
-		RequestHttpMethod::Get
+	fn http_method(&self) -> req::Method {
+		req::Method::GET
 	}
 }
 
