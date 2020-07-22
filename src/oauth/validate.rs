@@ -23,7 +23,7 @@ pub struct Output {
 	pub user_id: String,
 
 	/// Expiration
-	pub expires_in: Option<usize>,
+	pub expires_in: Option<u64>,
 }
 
 impl OAuthRequest for Request {
