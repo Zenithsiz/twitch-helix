@@ -11,19 +11,19 @@ pub struct Request;
 #[derive(PartialEq, Eq, Clone, Debug, serde::Deserialize)]
 pub struct Output {
 	/// Client id
-	client_id: String,
+	pub client_id: String,
 
 	/// Login username
-	login: String,
+	pub login: String,
 
 	/// Scopes
-	scopes: Vec<String>,
+	pub scopes: Vec<String>,
 
 	/// User id
-	user_id: String,
+	pub user_id: String,
 
 	/// Expiration
-	expires_in: Option<usize>,
+	pub expires_in: Option<usize>,
 }
 
 impl OAuthRequest for Request {

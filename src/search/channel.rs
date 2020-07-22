@@ -51,44 +51,44 @@ impl HelixRequest for Request {
 #[derive(PartialEq, Eq, Clone, Debug, serde::Deserialize)]
 pub struct Output {
 	/// Response data
-	data: Vec<Channel>,
+	pub data: Vec<Channel>,
 
 	/// Page
-	pagination: Pagination,
+	pub pagination: Pagination,
 }
 
 /// Each channel in the output data
 #[derive(PartialEq, Eq, Clone, Debug, serde::Deserialize)]
 pub struct Channel {
 	/// Channel language
-	broadcaster_language: String,
+	pub broadcaster_language: String,
 
 	/// Display name
-	display_name: String,
+	pub display_name: String,
 
 	/// Game id
-	game_id: String,
+	pub game_id: String,
 
 	/// Channel id
-	id: String,
+	pub id: String,
 
 	/// Live status
-	is_live: bool,
+	pub is_live: bool,
 
 	/// Tag IDs that apply to the stream.
 	/// Note: Category tags are not returned
-	tag_ids: Vec<String>,
+	pub tag_ids: Vec<String>,
 
 	/// Thumbnail url
-	thumbnail_url: String,
+	pub thumbnail_url: String,
 
 	/// Title
-	title: String,
+	pub title: String,
 
 	/// UTC timestamp for stream start
 	/// Live streams only.
 	#[serde(deserialize_with = "deserialize_channel_start_at")]
-	started_at: Option<chrono::DateTime<chrono::Utc>>,
+	pub started_at: Option<chrono::DateTime<chrono::Utc>>,
 }
 
 /// Deserializer for [`Channel::started_at`]
