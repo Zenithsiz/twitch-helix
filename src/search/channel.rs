@@ -86,5 +86,31 @@ pub struct Channel {
 
 	/// UTC timestamp for stream start
 	/// Live streams only.
-	started_at: Option<String>,
+	#[serde(deserialize_with = "deserialize_channel_start_at")]
+	started_at: Option<chrono::DateTime<chrono::Utc>>,
+}
+
+/// Deserializer for [`Channel::started_at`]
+fn deserialize_channel_start_at<'de, D>(deserializer: D) -> Result<Option<chrono::DateTime<chrono::Utc>>, D::Error>
+where
+	D: serde::Deserializer<'de>,
+{
+	// Deserialize as a string
+	let started_at = <String as serde::Deserialize>::deserialize(deserializer)?;
+
+	// If it's empty, return `None`
+	if started_at.is_empty() {
+		return Ok(None);
+	}
+
+	// Else try to parse it as a `Utc`
+	match started_at.parse() {
+		Ok(started_at) => Ok(Some(started_at)),
+
+		// On error, give an `invalid_value` error.
+		Err(err) => Err(<D::Error as serde::de::Error>::invalid_value(
+			serde::de::Unexpected::Str(&started_at),
+			&format!("Unable to parse time as `DateTime<Utc>`: {}", err).as_str(),
+		)),
+	}
 }
