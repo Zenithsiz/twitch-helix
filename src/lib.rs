@@ -28,5 +28,6 @@ pub mod url;
 pub mod client;
 
 // Exports
+pub use client::Client;
 pub use request::{HelixRequest, OAuthRequest};
 pub use response::HelixResponse;
