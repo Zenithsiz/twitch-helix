@@ -1,5 +1,12 @@
 //! Helix request trait
 
+// Modules
+pub mod channel;
+pub mod games;
+pub mod search;
+
+// Exports
+
 // Imports
 use reqwest as req;
 

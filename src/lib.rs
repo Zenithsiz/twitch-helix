@@ -1,9 +1,9 @@
 //! Twitch Helix requests
-//! 
+//!
 //! This library offers a list of requests supported by twitch's `Helix`API.
-//! 
+//!
 //! Each request is it's it's own submodule, typically following it's url.
-//! 
+//!
 //! # Client
 //! This library also offers a client to help with the connections.
 //! It is not mandatory to use the client, as all requests do not depend
@@ -23,15 +23,13 @@
 #![allow(clippy::missing_errors_doc)]
 
 // Modules
-pub mod games;
+
+pub mod client;
 pub mod oauth;
 pub mod request;
 pub mod response;
-pub mod search;
 #[macro_use]
 pub mod url;
-pub mod channel;
-pub mod client;
 
 // Exports
 pub use client::Client;
