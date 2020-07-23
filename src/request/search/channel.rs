@@ -58,9 +58,9 @@ impl Request {
 	/// the query to search for
 	pub fn new(query: impl Into<String>) -> Self {
 		Self {
-			query:     query.into(),
-			first:     None,
-			after:     None,
+			query: query.into(),
+			first: None,
+			after: None,
 			live_only: None,
 		}
 	}
@@ -83,7 +83,7 @@ impl Request {
 	}
 
 	/// Finds the exact channel requested given the response by reference.
-	/// 
+	///
 	/// See [`Self::channel`] for more information.
 	#[must_use]
 	pub fn channel_ref<'a>(&self, channels: &'a [Channel]) -> Option<&'a Channel> {
@@ -116,7 +116,7 @@ impl HelixRequest for Request {
 		if let Some(live_only) = &self.live_only {
 			query_pairs.append_pair("live_only", &live_only.to_string());
 		}
-		
+
 		// Drop the query pairs and return the url
 		std::mem::drop(query_pairs);
 		url
@@ -164,13 +164,15 @@ pub struct Channel {
 }
 
 /// Deserializer for [`Channel::started_at`]
-/// 
+///
 /// # Example
 /// ```
 /// # use twitch_helix::request::search::channel::deserialize_channel_start_at;
 /// use chrono::{Datelike, Timelike};
 /// let mut deserializer = serde_json::Deserializer::from_str("\"2020-07-23T14:49:33Z\"");
-/// let res = deserialize_channel_start_at(&mut deserializer).expect("Unable to parse utc date-time").expect("Parsed no utc time-date from a non-empty string");
+/// let res = deserialize_channel_start_at(&mut deserializer)
+///   .expect("Unable to parse utc date-time")
+///   .expect("Parsed no utc time-date from a non-empty string");
 /// assert_eq!(res.year(), 2020);
 /// assert_eq!(res.month(), 07);
 /// assert_eq!(res.day(), 23);

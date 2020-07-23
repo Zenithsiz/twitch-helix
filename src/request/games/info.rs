@@ -59,12 +59,12 @@ impl Request {
 					if unicase::eq(id, &game.id) {
 						return Some(game);
 					}
-				},
+				}
 				Self::Name(name) => {
 					if unicase::eq(name, &game.name) {
 						return Some(game);
 					}
-				},
+				}
 			}
 		}
 
@@ -84,12 +84,12 @@ impl Request {
 					if unicase::eq(id, &game.id) {
 						return Some(game);
 					}
-				},
+				}
 				Self::Name(name) => {
 					if unicase::eq(name, &game.name) {
 						return Some(game);
 					}
-				},
+				}
 			}
 		}
 
@@ -116,7 +116,6 @@ impl HelixRequest for Request {
 		req::Method::GET
 	}
 }
-
 
 /// Each game in the output data
 #[derive(PartialEq, Eq, Clone, Debug)]
