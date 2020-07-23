@@ -9,7 +9,7 @@ use reqwest as req;
 /// This request uses the `/search/channels` path
 /// to search channels by a query string.
 ///
-/// Output is a list of `[Channel]s`.
+/// Response is a list of `[Channel]s`.
 ///
 /// # Examples
 /// Simple request:
@@ -102,7 +102,7 @@ impl Request {
 }
 
 impl HelixRequest for Request {
-	type Output = Vec<Channel>;
+	type Response = Vec<Channel>;
 
 	fn url(&self) -> url::Url {
 		// Append all our arguments if they exist

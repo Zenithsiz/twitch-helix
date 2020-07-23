@@ -13,8 +13,8 @@ use reqwest as req;
 
 /// A Helix request
 pub trait HelixRequest {
-	/// Output type
-	type Output: for<'de> serde::Deserialize<'de>;
+	/// Response type
+	type Response: for<'de> serde::Deserialize<'de>;
 
 	/// Returns this request's url
 	fn url(&self) -> url::Url;
@@ -25,8 +25,8 @@ pub trait HelixRequest {
 
 /// An OAuth request
 pub trait OAuthRequest {
-	/// Output type
-	type Output: for<'de> serde::Deserialize<'de>;
+	/// Response type
+	type Response: for<'de> serde::Deserialize<'de>;
 
 	/// Returns this request's url
 	fn url(&self) -> url::Url;

@@ -56,7 +56,7 @@ impl Request {
 }
 
 impl HelixRequest for Request {
-	type Output = Vec<Channel>;
+	type Response = Vec<Channel>;
 
 	fn url(&self) -> url::Url {
 		let mut url = helix_url!(channels);

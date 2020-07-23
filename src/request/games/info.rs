@@ -71,7 +71,7 @@ impl Request {
 }
 
 impl HelixRequest for Request {
-	type Output = Vec<Game>;
+	type Response = Vec<Game>;
 
 	fn url(&self) -> url::Url {
 		let mut url = helix_url!(games);

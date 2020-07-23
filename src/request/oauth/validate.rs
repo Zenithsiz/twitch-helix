@@ -7,9 +7,9 @@ use crate::{oauth_url, OAuthRequest};
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub struct Request;
 
-/// Channel search output
+/// OAuth validation response
 #[derive(PartialEq, Eq, Clone, Debug, serde::Deserialize)]
-pub struct Output {
+pub struct Response {
 	/// Client id
 	pub client_id: String,
 
@@ -27,7 +27,7 @@ pub struct Output {
 }
 
 impl OAuthRequest for Request {
-	type Output = Output;
+	type Response = Response;
 
 	fn url(&self) -> url::Url {
 		oauth_url!(oauth2 / validate)
