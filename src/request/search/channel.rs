@@ -5,6 +5,41 @@ use crate::{helix_url, HelixRequest};
 use reqwest as req;
 
 /// Channel search request
+///
+/// This request uses the `/search/channels` path
+/// to search channels by a query string.
+///
+/// Output is a list of `[Channel]s`.
+///
+/// # Examples
+/// Simple request:
+/// ```
+/// # use twitch_helix::request::search::channel::Request;
+/// # use twitch_helix::helix_url;
+/// # use twitch_helix::HelixRequest;
+/// let mut request = Request::new("my-channel");
+///
+/// let url = request.url();
+/// assert_eq!(url.host_str(), Some("api.twitch.tv"));
+/// assert_eq!(url.path(), "/helix/search/channels");
+/// assert_eq!(url.query(), Some("query=my-channel"));
+/// ```
+///
+/// Using every argument:
+/// ```
+/// # use twitch_helix::request::search::channel::Request;
+/// # use twitch_helix::helix_url;
+/// # use twitch_helix::HelixRequest;
+/// let mut request = Request::new("my-channel");
+/// request.first     = Some(100);
+/// request.after     = Some("my-cursor".to_string());
+/// request.live_only = Some(true);
+///
+/// let url = request.url();
+/// assert_eq!(url.host_str(), Some("api.twitch.tv"));
+/// assert_eq!(url.path(), "/helix/search/channels");
+/// assert_eq!(url.query(), Some("query=my-channel&first=100&after=my-cursor&live_only=true"));
+/// ```
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub struct Request {
 	/// Search query
@@ -32,12 +67,10 @@ impl Request {
 		}
 	}
 
-	/// Returns the specific channel found by this request's
-	/// response
+	/// Finds the exact channel requested given the response
 	///
-	/// It attempts to exact match any channel in the output
-	/// with the request, if found, it is returned, else
-	/// `None` is returned.
+	/// Attempts to find an exact match in the `display_name`
+	/// of the channel, without considering case.
 	#[must_use]
 	pub fn channel(&self, channels: Vec<Channel>) -> Option<Channel> {
 		// Check every channel in the response
@@ -51,9 +84,8 @@ impl Request {
 		None
 	}
 
-	/// Returns the specific channel found by this request's
-	/// response by ref
-	///
+	/// Finds the exact channel requested given the response by reference.
+	/// 
 	/// See [`Self::channel`] for more information.
 	#[must_use]
 	pub fn channel_ref<'a>(&self, channels: &'a [Channel]) -> Option<&'a Channel> {
@@ -73,8 +105,22 @@ impl HelixRequest for Request {
 	type Output = Vec<Channel>;
 
 	fn url(&self) -> url::Url {
+		// Append all our arguments if they exist
 		let mut url = helix_url!(search / channels);
-		url.query_pairs_mut().append_pair("query", &self.query);
+		let mut query_pairs = url.query_pairs_mut();
+		query_pairs.append_pair("query", &self.query);
+		if let Some(first) = &self.first {
+			query_pairs.append_pair("first", &first.to_string());
+		}
+		if let Some(after) = &self.after {
+			query_pairs.append_pair("after", after);
+		}
+		if let Some(live_only) = &self.live_only {
+			query_pairs.append_pair("live_only", &live_only.to_string());
+		}
+		
+		// Drop the query pairs and return the url
+		std::mem::drop(query_pairs);
 		url
 	}
 
@@ -118,7 +164,22 @@ pub struct Channel {
 }
 
 /// Deserializer for [`Channel::started_at`]
-fn deserialize_channel_start_at<'de, D>(deserializer: D) -> Result<Option<chrono::DateTime<chrono::Utc>>, D::Error>
+/// 
+/// # Example
+/// ```
+/// # use twitch_helix::request::search::channel::deserialize_channel_start_at;
+/// use chrono::{Datelike, Timelike};
+/// let mut deserializer = serde_json::Deserializer::from_str("\"2020-07-23T14:49:33Z\"");
+/// let res = deserialize_channel_start_at(&mut deserializer).expect("Unable to parse utc date-time").expect("Parsed no utc time-date from a non-empty string");
+/// assert_eq!(res.year(), 2020);
+/// assert_eq!(res.month(), 07);
+/// assert_eq!(res.day(), 23);
+/// assert_eq!(res.hour(), 14);
+/// assert_eq!(res.minute(), 49);
+/// assert_eq!(res.second(), 33);
+/// ```
+#[doc(hidden)] // Required until we get a `pub(test)` or some macro that can do it
+pub fn deserialize_channel_start_at<'de, D>(deserializer: D) -> Result<Option<chrono::DateTime<chrono::Utc>>, D::Error>
 where
 	D: serde::Deserializer<'de>,
 {
