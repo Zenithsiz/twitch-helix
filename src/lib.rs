@@ -10,7 +10,7 @@
 //! on it, however.
 
 // Lints
-#![warn(clippy::restriction, clippy::pedantic, clippy::nursery)]
+#![warn(clippy::restriction, clippy::pedantic, clippy::nursery, clippy::cargo)]
 // We have fine-grained modules, which causes this to happen often
 #![allow(clippy::module_name_repetitions)]
 // No need to mark EVERY public function as `inline`
@@ -21,9 +21,10 @@
 #![allow(clippy::shadow_reuse)]
 // We have fine-grained error types, which are self-explanatory
 #![allow(clippy::missing_errors_doc)]
+// False positive, we have them all
+#![allow(clippy::cargo_common_metadata)]
 
 // Modules
-
 pub mod client;
 pub mod request;
 pub mod response;

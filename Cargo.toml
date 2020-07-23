@@ -3,6 +3,11 @@ name = "twitch-helix"
 version = "0.1.0"
 authors = ["Filipe Rodrigues <filipejacintorodrigues1@gmail.com>"]
 edition = "2018"
+description = "API to interact with twitch's Helix API"
+license-file = "LICENSE"
+repository = "https://github.com/Zenithsiz/twitch-helix/"
+keywords = ["twitch", "web"]
+categories = ["web-programming::http-client"]
 
 [dependencies]
 
