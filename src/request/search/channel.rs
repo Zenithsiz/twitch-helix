@@ -15,7 +15,6 @@ use reqwest as req;
 /// Simple request:
 /// ```
 /// # use twitch_helix::request::search::channel::Request;
-/// # use twitch_helix::helix_url;
 /// # use twitch_helix::HelixRequest;
 /// let mut request = Request::new("my-channel");
 ///
@@ -28,7 +27,6 @@ use reqwest as req;
 /// Using every argument:
 /// ```
 /// # use twitch_helix::request::search::channel::Request;
-/// # use twitch_helix::helix_url;
 /// # use twitch_helix::HelixRequest;
 /// let mut request = Request::new("my-channel");
 /// request.first     = Some(100);
@@ -70,7 +68,7 @@ impl Request {
 	/// Finds the exact channel requested given the response
 	///
 	/// Attempts to find an exact match in the `display_name`
-	/// of the channel, without considering case.
+	/// field of the channel, without considering case.
 	#[must_use]
 	pub fn channel(&self, channels: Vec<Channel>) -> Option<Channel> {
 		// Check every channel in the response
@@ -130,7 +128,8 @@ impl HelixRequest for Request {
 }
 
 /// Each channel in the output data
-#[derive(PartialEq, Eq, Clone, Debug, serde::Deserialize)]
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
 pub struct Channel {
 	/// Channel language
 	pub broadcaster_language: String,
@@ -159,6 +158,7 @@ pub struct Channel {
 
 	/// UTC timestamp for stream start
 	/// Live streams only.
+	// TODO: Deserialize with our custom function too.
 	#[serde(deserialize_with = "deserialize_channel_start_at")]
 	pub started_at: Option<chrono::DateTime<chrono::Utc>>,
 }

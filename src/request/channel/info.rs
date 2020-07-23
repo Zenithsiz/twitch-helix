@@ -5,6 +5,23 @@ use crate::{helix_url, HelixRequest};
 use reqwest as req;
 
 /// Channel info request
+///
+/// This request uses the `/channel` path
+/// to get information about a channel
+/// given their broadcaster id.
+///
+/// # Examples
+/// ```
+/// # use twitch_helix::request::channel::info::Request;
+/// # use twitch_helix::HelixRequest;
+/// let mut request = Request::new("my-channel-id");
+///
+/// let url = request.url();
+/// assert_eq!(url.host_str(), Some("api.twitch.tv"));
+/// assert_eq!(url.path(), "/helix/channels");
+/// assert_eq!(url.query(), Some("broadcaster_id=my-channel-id"));
+/// ```
+///
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub struct Request {
 	/// Broadcaster ID
@@ -14,16 +31,16 @@ pub struct Request {
 impl Request {
 	/// Creates a new request
 	#[must_use]
-	pub const fn new(broadcaster_id: String) -> Self {
-		Self { broadcaster_id }
+	pub fn new(broadcaster_id: impl Into<String>) -> Self {
+		Self {
+			broadcaster_id: broadcaster_id.into(),
+		}
 	}
 
-	/// Returns the specific channel found by this request's
-	/// response
+	/// Finds the exact channel requested given the response
 	///
-	/// It attempts to exact match any channel in the output
-	/// with the request, if found, it is returned, else
-	/// `None` is returned.
+	/// Attempts to find an exact match in the `display_name`
+	/// field of the channel, without considering case.
 	#[must_use]
 	pub fn channel(&self, channels: Vec<Channel>) -> Option<Channel> {
 		// Check every channel in the response
@@ -37,8 +54,7 @@ impl Request {
 		None
 	}
 
-	/// Returns the specific channel found by this request's
-	/// response by ref
+	/// Finds the exact channel requested given the response by reference.
 	///
 	/// See [`Self::channel`] for more information.
 	#[must_use]
@@ -70,7 +86,8 @@ impl HelixRequest for Request {
 }
 
 /// Each channel in the output data
-#[derive(PartialEq, Eq, Clone, Debug, serde::Deserialize)]
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
 pub struct Channel {
 	/// Channel streaming status
 	pub status: String,
