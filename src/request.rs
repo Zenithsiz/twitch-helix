@@ -3,6 +3,7 @@
 // Modules
 pub mod channel;
 pub mod games;
+pub mod oauth;
 pub mod search;
 
 // Exports

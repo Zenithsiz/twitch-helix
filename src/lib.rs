@@ -25,7 +25,6 @@
 // Modules
 
 pub mod client;
-pub mod oauth;
 pub mod request;
 pub mod response;
 #[macro_use]
