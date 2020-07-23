@@ -26,6 +26,7 @@ pub mod response;
 pub mod search;
 #[macro_use]
 pub mod url;
+pub mod channel;
 pub mod client;
 
 // Exports

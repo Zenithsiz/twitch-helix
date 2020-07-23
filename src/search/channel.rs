@@ -1,7 +1,7 @@
 //! Channel search request
 
 // Imports
-use crate::{helix_url, response::Pagination, HelixRequest};
+use crate::{helix_url, HelixRequest};
 use reqwest as req;
 
 /// Channel search request
@@ -39,9 +39,26 @@ impl Request {
 	/// with the request, if found, it is returned, else
 	/// `None` is returned.
 	#[must_use]
-	pub fn channel<'a>(&self, output: &'a Output) -> Option<&'a Channel> {
+	pub fn channel(&self, channels: Vec<Channel>) -> Option<Channel> {
 		// Check every channel in the response
-		for channel in &output.data {
+		for channel in channels {
+			if unicase::eq(&self.query, &channel.display_name) {
+				return Some(channel);
+			}
+		}
+
+		// If we get here, no channel was found
+		None
+	}
+
+	/// Returns the specific channel found by this request's
+	/// response by ref
+	///
+	/// See [`Self::channel`] for more information.
+	#[must_use]
+	pub fn channel_ref<'a>(&self, channels: &'a [Channel]) -> Option<&'a Channel> {
+		// Check every channel in the response
+		for channel in channels {
 			if unicase::eq(&self.query, &channel.display_name) {
 				return Some(channel);
 			}
@@ -53,7 +70,7 @@ impl Request {
 }
 
 impl HelixRequest for Request {
-	type Output = Output;
+	type Output = Vec<Channel>;
 
 	fn url(&self) -> url::Url {
 		let mut url = helix_url!(search / channels);
@@ -64,16 +81,6 @@ impl HelixRequest for Request {
 	fn http_method(&self) -> req::Method {
 		req::Method::GET
 	}
-}
-
-/// Channel search output
-#[derive(PartialEq, Eq, Clone, Debug, serde::Deserialize)]
-pub struct Output {
-	/// Response data
-	pub data: Vec<Channel>,
-
-	/// Page
-	pub pagination: Pagination,
 }
 
 /// Each channel in the output data

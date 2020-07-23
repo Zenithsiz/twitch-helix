@@ -1,7 +1,7 @@
-//! Get game info request
+//! Game info request
 
 // Imports
-use crate::{helix_url, response::Pagination, HelixRequest};
+use crate::{helix_url, HelixRequest};
 use reqwest as req;
 
 /// Game info request
@@ -22,9 +22,35 @@ impl Request {
 	/// with the request, if found, it is returned, else
 	/// `None` is returned.
 	#[must_use]
-	pub fn game<'a>(&self, output: &'a Output) -> Option<&'a Game> {
+	pub fn game(&self, games: Vec<Game>) -> Option<Game> {
 		// Check every game in the response
-		for game in &output.data {
+		for game in games {
+			match self {
+				Self::Id(id) => {
+					if unicase::eq(id, &game.id) {
+						return Some(game);
+					}
+				},
+				Self::Name(name) => {
+					if unicase::eq(name, &game.name) {
+						return Some(game);
+					}
+				},
+			}
+		}
+
+		// If we get here, no game was found
+		None
+	}
+
+	/// Returns the specific game found by this request's
+	/// response by ref
+	///
+	/// See [`Self::game`] for more information.
+	#[must_use]
+	pub fn game_ref<'a>(&self, games: &'a [Game]) -> Option<&'a Game> {
+		// Check every game in the response
+		for game in games {
 			match self {
 				Self::Id(id) => {
 					if unicase::eq(id, &game.id) {
@@ -45,10 +71,10 @@ impl Request {
 }
 
 impl HelixRequest for Request {
-	type Output = Output;
+	type Output = Vec<Game>;
 
 	fn url(&self) -> url::Url {
-		let mut url = helix_url!(search / channels);
+		let mut url = helix_url!(games);
 		let mut query_pairs = url.query_pairs_mut();
 		match self {
 			Self::Id(id) => query_pairs.append_pair("id", id),
@@ -63,25 +89,16 @@ impl HelixRequest for Request {
 	}
 }
 
-/// Game info output
-#[derive(PartialEq, Eq, Clone, Debug, serde::Deserialize)]
-pub struct Output {
-	/// Response data
-	pub data: Vec<Game>,
-
-	/// Page
-	pub pagination: Pagination,
-}
 
 /// Each game in the output data
 #[derive(PartialEq, Eq, Clone, Debug, serde::Deserialize)]
 pub struct Game {
 	/// Game's box art
-	box_art_url: String,
+	pub box_art_url: String,
 
 	/// Game id
-	id: String,
+	pub id: String,
 
 	/// Game name
-	name: String,
+	pub name: String,
 }
