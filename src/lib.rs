@@ -1,9 +1,13 @@
 //! Twitch Helix requests
-//!
-//! This crate offers a list of all requests `twitch`'s `Helix` API offers.
-//!
-//! It is left to the user to send these requests themselves, as this crate
-//! only offers the url and parsing after data has been received.
+//! 
+//! This library offers a list of requests supported by twitch's `Helix`API.
+//! 
+//! Each request is it's it's own submodule, typically following it's url.
+//! 
+//! # Client
+//! This library also offers a client to help with the connections.
+//! It is not mandatory to use the client, as all requests do not depend
+//! on it, however.
 
 // Lints
 #![warn(clippy::restriction, clippy::pedantic, clippy::nursery)]

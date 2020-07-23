@@ -30,7 +30,6 @@ impl OAuthRequest for Request {
 	type Output = Output;
 
 	fn url(&self) -> url::Url {
-		let url = oauth_url!(oauth2 / validate);
-		url
+		oauth_url!(oauth2 / validate)
 	}
 }
