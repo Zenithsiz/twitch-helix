@@ -1,10 +1,15 @@
-//! Client to Helix
+//! Helix client
 
 // Imports
 use crate::{HelixRequest, HelixResponse, OAuthRequest, OAuthResponse};
 use reqwest as req;
 
-/// A client to helix
+/// A client to make requests to Helix with.
+///
+/// The client is initialized given an initial oauth string.
+/// This allows you to do a [`OAuthRequest`] for validating
+/// this token and getting a client id, which may then be used
+/// to make [`HelixRequest`]
 #[derive(Clone, Debug)]
 pub struct Client {
 	/// Underlying client
@@ -14,7 +19,7 @@ pub struct Client {
 	oauth: String,
 }
 
-/// Error type for [`Client::request`]
+/// Error type for [`Client::request_oauth`] and [`Client::request_helix`]
 #[derive(Debug, thiserror::Error)]
 pub enum RequestError {
 	/// Unable to send request
