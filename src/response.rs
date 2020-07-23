@@ -1,6 +1,10 @@
 //! Helix responses
 
 /// Helix response
+///
+/// Every response from Helix may be an error, of type [`ResponseError`],
+/// and each successful response, is wrapped within a `data` field, as well
+/// as a possible `pagination` field for requests that may search further.
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[serde(untagged)]
@@ -24,6 +28,10 @@ impl<T> HelixResponse<T> {
 }
 
 /// OAuth response
+///
+/// Every response from OAuth may be an error, of type [`ResponseError`],
+/// bit each successful response, unlike [`HelixResponse`], always contains
+/// the response type itself.
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[serde(untagged)]
@@ -47,6 +55,10 @@ impl<T> OAuthResponse<T> {
 }
 
 /// Response data
+///
+/// The response data for each helix request is wrapped
+/// within a `data` field, as well as contain a `pagination`
+/// field for requests with multiple pages.
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 pub struct ResponseData<T> {
@@ -58,6 +70,10 @@ pub struct ResponseData<T> {
 }
 
 /// Response error
+///
+/// Every response may return an error. Errors from
+/// twitch always contain a status and message, and
+/// optionally a further error type.
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 #[derive(thiserror::Error)]
@@ -74,6 +90,10 @@ pub struct ResponseError {
 }
 
 /// Response pagination
+///
+/// Represents the current page from the request.
+/// May be fed into some requests to get the next page,
+/// as a linked-list.
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 pub struct Pagination {
