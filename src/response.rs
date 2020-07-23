@@ -23,6 +23,29 @@ impl<T> HelixResponse<T> {
 	}
 }
 
+/// OAuth response
+#[derive(PartialEq, Eq, Clone, Debug)]
+#[derive(serde::Serialize, serde::Deserialize)]
+#[serde(untagged)]
+pub enum OAuthResponse<T> {
+	/// Ok
+	Ok(T),
+
+	/// Error
+	Err(ResponseError),
+}
+
+impl<T> OAuthResponse<T> {
+	/// Turns this response into a `Result`
+	#[allow(clippy::missing_const_for_fn)] // False positive, we can't use it because `T` might need to be dropped
+	pub fn into_result(self) -> Result<T, ResponseError> {
+		match self {
+			Self::Ok(ok) => Ok(ok),
+			Self::Err(err) => Err(err),
+		}
+	}
+}
+
 /// Response data
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]

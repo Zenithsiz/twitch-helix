@@ -33,4 +33,4 @@ pub mod url;
 // Exports
 pub use client::Client;
 pub use request::{HelixRequest, OAuthRequest};
-pub use response::HelixResponse;
+pub use response::{HelixResponse, OAuthResponse};

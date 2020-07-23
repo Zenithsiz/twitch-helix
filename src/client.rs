@@ -1,7 +1,7 @@
 //! Client to Helix
 
 // Imports
-use crate::{HelixRequest, HelixResponse, OAuthRequest};
+use crate::{HelixRequest, HelixResponse, OAuthRequest, OAuthResponse};
 use reqwest as req;
 
 /// A client to helix
@@ -37,7 +37,7 @@ impl Client {
 	}
 
 	/// Performs an OAuth request to twitch
-	pub async fn request_oauth<R: OAuthRequest + Send + Sync>(&mut self, request: &R) -> Result<R::Output, RequestError> {
+	pub async fn request_oauth<R: OAuthRequest + Send + Sync>(&mut self, request: &R) -> Result<OAuthResponse<R::Output>, RequestError> {
 		// Get url
 		let url = request.url();
 
