@@ -24,6 +24,7 @@ pub async fn main() -> Result<(), Box<dyn std::error::Error>> {
 		.await?
 		.into_result()?;
 	
+	let channel = "<insert the channel name here>";
 	let channel_info_request = twitch_helix::request::search::channel::Request::new(channel);
 	let channel_info_response = client
 		.request_helix(&channel_info_request, &validation.client_id)
