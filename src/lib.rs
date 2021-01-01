@@ -2,7 +2,8 @@
 //!
 //! This library offers a list of requests supported by twitch's `Helix`API.
 //!
-//! Each request is it's it's own submodule, typically following it's url.
+//! Each request is in it's own submodule, under the [`requests`] module,
+//! typically following it's url, after `/helix/...`, where possible.
 //!
 //! # Client
 //! This library also offers a client to help with the connections.

@@ -6,7 +6,7 @@ use reqwest as req;
 
 /// Channel info request
 ///
-/// This request uses the `/channel` path
+/// This request uses the `/channels` path
 /// to get information about a channel
 /// given their broadcaster id.
 ///
