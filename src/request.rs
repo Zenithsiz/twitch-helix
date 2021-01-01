@@ -6,10 +6,15 @@ pub mod games;
 pub mod oauth;
 pub mod search;
 
-// Exports
+/// An http method
+#[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
+pub enum HttpMethod {
+	/// Get
+	Get,
 
-// Imports
-use reqwest as req;
+	/// Post
+	Post,
+}
 
 /// A Helix request
 ///
@@ -28,7 +33,7 @@ pub trait HelixRequest {
 	fn url(&self) -> url::Url;
 
 	/// Returns the request's http method
-	fn http_method(&self) -> req::Method;
+	fn http_method(&self) -> HttpMethod;
 }
 
 /// An OAuth request
@@ -39,7 +44,7 @@ pub trait HelixRequest {
 /// response type as it's `Ok` variant.
 ///
 /// An oauth request must simply return it's url, as all requests use
-/// the `GET` http method.
+/// the `Get` http method.
 pub trait OAuthRequest {
 	/// Response type
 	type Response: for<'de> serde::Deserialize<'de>;

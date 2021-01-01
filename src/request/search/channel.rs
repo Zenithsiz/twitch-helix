@@ -1,8 +1,7 @@
 //! Channel search request
 
 // Imports
-use crate::{helix_url, HelixRequest};
-use reqwest as req;
+use crate::{helix_url, HelixRequest, HttpMethod};
 
 /// Channel search request
 ///
@@ -122,8 +121,8 @@ impl HelixRequest for Request {
 		url
 	}
 
-	fn http_method(&self) -> req::Method {
-		req::Method::GET
+	fn http_method(&self) -> HttpMethod {
+		HttpMethod::Get
 	}
 }
 
@@ -158,49 +157,6 @@ pub struct Channel {
 
 	/// UTC timestamp for stream start
 	/// Live streams only.
-	// TODO: Deserialize with our custom function too.
-	#[serde(deserialize_with = "deserialize_channel_start_at")]
+	#[serde(with = "crate::util::utc_date_time")]
 	pub started_at: Option<chrono::DateTime<chrono::Utc>>,
-}
-
-/// Deserializer for [`Channel::started_at`]
-///
-/// # Example
-/// ```
-/// # use twitch_helix::request::search::channel::deserialize_channel_start_at;
-/// use chrono::{Datelike, Timelike};
-/// let mut deserializer = serde_json::Deserializer::from_str("\"2020-07-23T14:49:33Z\"");
-/// let res = deserialize_channel_start_at(&mut deserializer)
-///   .expect("Unable to parse utc date-time")
-///   .expect("Parsed no utc time-date from a non-empty string");
-/// assert_eq!(res.year(), 2020);
-/// assert_eq!(res.month(), 07);
-/// assert_eq!(res.day(), 23);
-/// assert_eq!(res.hour(), 14);
-/// assert_eq!(res.minute(), 49);
-/// assert_eq!(res.second(), 33);
-/// ```
-#[doc(hidden)] // Required until we get a `pub(test)` or some macro that can do it
-pub fn deserialize_channel_start_at<'de, D>(deserializer: D) -> Result<Option<chrono::DateTime<chrono::Utc>>, D::Error>
-where
-	D: serde::Deserializer<'de>,
-{
-	// Deserialize as a string
-	let started_at = <String as serde::Deserialize>::deserialize(deserializer)?;
-
-	// If it's empty, return `None`
-	if started_at.is_empty() {
-		return Ok(None);
-	}
-
-	// Else try to parse it as a `Utc`
-	match started_at.parse() {
-		Ok(started_at) => Ok(Some(started_at)),
-
-		// On error, give an `invalid_value` error.
-		Err(err) => Err(<D::Error as serde::de::Error>::invalid_value(
-			serde::de::Unexpected::Str(&started_at),
-			&format!("Unable to parse time as `DateTime<Utc>`: {}", err).as_str(),
-		)),
-	}
 }

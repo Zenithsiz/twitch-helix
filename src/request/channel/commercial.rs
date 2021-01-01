@@ -1,8 +1,7 @@
 //! Channel start commercial request
 
 // Imports
-use crate::{helix_url, HelixRequest};
-use reqwest as req;
+use crate::{helix_url, HelixRequest, HttpMethod};
 
 /// Channel start commercial request
 ///
@@ -90,8 +89,8 @@ impl HelixRequest for Request {
 		url
 	}
 
-	fn http_method(&self) -> req::Method {
-		req::Method::POST
+	fn http_method(&self) -> HttpMethod {
+		HttpMethod::Post
 	}
 }
 

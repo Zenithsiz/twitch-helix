@@ -1,8 +1,7 @@
 //! Channel info request
 
 // Imports
-use crate::{helix_url, HelixRequest};
-use reqwest as req;
+use crate::{helix_url, HelixRequest, HttpMethod};
 
 /// Channel info request
 ///
@@ -80,8 +79,8 @@ impl HelixRequest for Request {
 		url
 	}
 
-	fn http_method(&self) -> req::Method {
-		req::Method::GET
+	fn http_method(&self) -> HttpMethod {
+		HttpMethod::Get
 	}
 }
 
