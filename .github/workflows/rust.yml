@@ -17,10 +17,12 @@ jobs:
         with:
           profile: minimal
           toolchain: stable
-          components: rustfmt, clippy
+          components: rustfmt, clippy, doc
       - name: Clippy
         run: cargo +stable clippy --verbose
       - name: Run tests
         run: cargo +stable test --verbose
       - name: Rust Fmt
         run: cargo +stable fmt --verbose -- --check
+      - name: Rust Doc
+        run: cargo +stable doc --verbose --no-deps
