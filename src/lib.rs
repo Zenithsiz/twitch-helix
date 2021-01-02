@@ -28,6 +28,8 @@
 #![allow(clippy::cargo_common_metadata)]
 // We prefer to use match ergonomics
 #![allow(clippy::pattern_type_mismatch)]
+// We panic on tests
+#![cfg_attr(test, allow(clippy::panic, clippy::expect_used))]
 
 // Modules
 #[cfg(feature = "client")]
