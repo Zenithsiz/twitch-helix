@@ -10,7 +10,7 @@ keywords = ["twitch", "web"]
 categories = ["web-programming::http-client"]
 
 [features]
-default = []
+default = ["client"]
 client = ["reqwest"]
 
 [dependencies]

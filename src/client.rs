@@ -1,7 +1,7 @@
 //! Helix client
 
 // Imports
-use crate::{HelixRequest, HelixResponse, OAuthRequest, OAuthResponse};
+use crate::{HelixRequest, HelixResponse, HttpMethod, OAuthRequest, OAuthResponse};
 use reqwest as req;
 
 /// A client to make requests to Helix with.
@@ -68,10 +68,16 @@ impl Client {
 		// Get url
 		let url = request.url();
 
+		// Translate the http method
+		let method = match request.http_method() {
+			HttpMethod::Get => req::Method::GET,
+			HttpMethod::Post => req::Method::POST,
+		};
+
 		// Build the request and send it
 		let response = self
 			.client
-			.request(request.http_method(), url)
+			.request(method, url)
 			.bearer_auth(&self.oauth)
 			.header("Client-ID", client_id)
 			.send()
