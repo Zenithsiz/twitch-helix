@@ -27,10 +27,10 @@ use crate::{helix_url, HelixRequest, HttpMethod};
 /// ```
 /// # use twitch_helix::request::search::channel::Request;
 /// # use twitch_helix::HelixRequest;
-/// let mut request = Request::new("my-channel");
-/// request.first     = Some(100);
-/// request.after     = Some("my-cursor".to_string());
-/// request.live_only = Some(true);
+/// let mut request = Request::new("my-channel")
+///   .with_first(100)
+///   .with_after("my-cursor".to_string())
+///   .with_live_only(true);
 ///
 /// let url = request.url();
 /// assert_eq!(url.host_str(), Some("api.twitch.tv"));
@@ -40,16 +40,16 @@ use crate::{helix_url, HelixRequest, HttpMethod};
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub struct Request {
 	/// Search query
-	pub query: String,
+	query: String,
 
 	/// Maximum number of objects to return
-	pub first: Option<usize>,
+	first: Option<usize>,
 
 	/// Cursor for forward pagination
-	pub after: Option<String>,
+	after: Option<String>,
 
 	/// Filter results for live streams only.
-	pub live_only: Option<bool>,
+	live_only: Option<bool>,
 }
 
 impl Request {
@@ -61,6 +61,27 @@ impl Request {
 			first: None,
 			after: None,
 			live_only: None,
+		}
+	}
+
+	/// Sets the maximum number of objects to return
+	#[must_use]
+	pub fn with_first(self, first: usize) -> Self {
+		Self { first: Some(first), ..self }
+	}
+
+	/// Sets the cursor for forward pagination
+	#[must_use]
+	pub fn with_after(self, after: String) -> Self {
+		Self { after: Some(after), ..self }
+	}
+
+	/// Sets if filtering results for live streams only
+	#[must_use]
+	pub fn with_live_only(self, live_only: bool) -> Self {
+		Self {
+			live_only: Some(live_only),
+			..self
 		}
 	}
 
@@ -104,20 +125,20 @@ impl HelixRequest for Request {
 	fn url(&self) -> url::Url {
 		// Append all our arguments if they exist
 		let mut url = helix_url!(search / channels);
-		let mut query_pairs = url.query_pairs_mut();
-		query_pairs.append_pair("query", &self.query);
-		if let Some(first) = &self.first {
-			query_pairs.append_pair("first", &first.to_string());
-		}
-		if let Some(after) = &self.after {
-			query_pairs.append_pair("after", after);
-		}
-		if let Some(live_only) = &self.live_only {
-			query_pairs.append_pair("live_only", &live_only.to_string());
-		}
 
-		// Drop the query pairs and return the url
-		std::mem::drop(query_pairs);
+		{
+			let mut query_pairs = url.query_pairs_mut();
+			query_pairs.append_pair("query", &self.query);
+			if let Some(first) = &self.first {
+				query_pairs.append_pair("first", &first.to_string());
+			}
+			if let Some(after) = &self.after {
+				query_pairs.append_pair("after", after);
+			}
+			if let Some(live_only) = &self.live_only {
+				query_pairs.append_pair("live_only", &live_only.to_string());
+			}
+		}
 		url
 	}
 

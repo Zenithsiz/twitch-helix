@@ -18,7 +18,6 @@ pub enum HelixResponse<T> {
 
 impl<T> HelixResponse<T> {
 	/// Turns this response into a `Result`
-	#[allow(clippy::missing_const_for_fn)] // False positive, we can't use it because `T` might need to be dropped
 	pub fn into_result(self) -> Result<ResponseData<T>, ResponseError> {
 		match self {
 			Self::Ok(ok) => Ok(ok),
@@ -45,7 +44,6 @@ pub enum OAuthResponse<T> {
 
 impl<T> OAuthResponse<T> {
 	/// Turns this response into a `Result`
-	#[allow(clippy::missing_const_for_fn)] // False positive, we can't use it because `T` might need to be dropped
 	pub fn into_result(self) -> Result<T, ResponseError> {
 		match self {
 			Self::Ok(ok) => Ok(ok),

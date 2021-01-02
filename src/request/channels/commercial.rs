@@ -82,10 +82,11 @@ impl HelixRequest for Request {
 
 	fn url(&self) -> url::Url {
 		let mut url = helix_url!(channels / commercial);
-		let mut query_pairs = url.query_pairs_mut();
-		query_pairs.append_pair("broadcaster_id", &self.broadcaster_id);
-		query_pairs.append_pair("length", &self.length.secs().to_string());
-		std::mem::drop(query_pairs);
+		{
+			let mut query_pairs = url.query_pairs_mut();
+			query_pairs.append_pair("broadcaster_id", &self.broadcaster_id);
+			query_pairs.append_pair("length", &self.length.secs().to_string());
+		}
 		url
 	}
 
@@ -103,6 +104,5 @@ pub struct Response {
 
 	/// Seconds until the next commercial can be
 	/// served on this channel
-	#[serde(rename = "retryAfter")]
 	pub retry_after: usize,
 }

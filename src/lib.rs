@@ -30,6 +30,8 @@
 #![allow(clippy::pattern_type_mismatch)]
 // We panic on tests
 #![cfg_attr(test, allow(clippy::panic, clippy::expect_used))]
+// Lots of false positives when using generics that might have destructors
+#![allow(clippy::missing_const_for_fn)]
 
 // Modules
 #[cfg(feature = "client")]

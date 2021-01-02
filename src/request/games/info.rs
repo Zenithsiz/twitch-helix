@@ -102,12 +102,13 @@ impl HelixRequest for Request {
 
 	fn url(&self) -> url::Url {
 		let mut url = helix_url!(games);
-		let mut query_pairs = url.query_pairs_mut();
-		match self {
-			Self::Id(id) => query_pairs.append_pair("id", id),
-			Self::Name(name) => query_pairs.append_pair("name", name),
-		};
-		std::mem::drop(query_pairs);
+		{
+			let mut query_pairs = url.query_pairs_mut();
+			match self {
+				Self::Id(id) => query_pairs.append_pair("id", id),
+				Self::Name(name) => query_pairs.append_pair("name", name),
+			};
+		}
 		url
 	}
 
