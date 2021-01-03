@@ -1,6 +1,7 @@
 //! Helix request trait
 
 // Modules
+pub mod analytics;
 pub mod channels;
 pub mod games;
 pub mod oauth;
