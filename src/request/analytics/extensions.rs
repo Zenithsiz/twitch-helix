@@ -10,13 +10,13 @@ use crate::{helix_url, HelixRequest, HttpMethod};
 ///
 /// # Examples
 /// ```
-/// # use twitch_helix::request::search::channel::Request;
+/// # use twitch_helix::request::analytics::extensions::Request;
 /// # use twitch_helix::HelixRequest;
 /// let mut request = Request::new();
 ///
 /// let url = request.url();
 /// assert_eq!(url.host_str(), Some("api.twitch.tv"));
-/// assert_eq!(url.path(), "/helix/analytics/extension");
+/// assert_eq!(url.path(), "/helix/analytics/extensions");
 /// assert_eq!(url.query(), Some(""));
 /// ```
 #[derive(PartialEq, Eq, Clone, Default, Debug)]
@@ -158,7 +158,7 @@ impl HelixRequest for Request {
 
 	fn url(&self) -> url::Url {
 		// Append all our arguments if they exist
-		let mut url = helix_url!(search / channels);
+		let mut url = helix_url!(analytics / extensions);
 
 		{
 			let mut query_pairs = url.query_pairs_mut();
