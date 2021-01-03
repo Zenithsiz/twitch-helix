@@ -7,10 +7,6 @@ pub mod games;
 pub mod oauth;
 pub mod search;
 
-// Exports
-#[deprecated = "Use `channels`"]
-pub use channels as channel;
-
 /// An http method
 #[derive(PartialEq, Eq, Clone, Copy, Hash, Debug)]
 pub enum HttpMethod {

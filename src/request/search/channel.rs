@@ -40,16 +40,16 @@ use crate::{helix_url, HelixRequest, HttpMethod};
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub struct Request {
 	/// Search query
-	query: String,
+	pub query: String,
 
 	/// Maximum number of objects to return
-	first: Option<usize>,
+	pub first: Option<usize>,
 
 	/// Cursor for forward pagination
-	after: Option<String>,
+	pub after: Option<String>,
 
 	/// Filter results for live streams only.
-	live_only: Option<bool>,
+	pub live_only: Option<bool>,
 }
 
 impl Request {
@@ -83,39 +83,6 @@ impl Request {
 			live_only: Some(live_only),
 			..self
 		}
-	}
-
-	/// Finds the exact channel requested given the response
-	///
-	/// Attempts to find an exact match in the `display_name`
-	/// field of the channel, without considering case.
-	#[must_use]
-	pub fn channel(&self, channels: Vec<Channel>) -> Option<Channel> {
-		// Check every channel in the response
-		for channel in channels {
-			if unicase::eq(&self.query, &channel.display_name) {
-				return Some(channel);
-			}
-		}
-
-		// If we get here, no channel was found
-		None
-	}
-
-	/// Finds the exact channel requested given the response by reference.
-	///
-	/// See [`Self::channel`] for more information.
-	#[must_use]
-	pub fn channel_ref<'a>(&self, channels: &'a [Channel]) -> Option<&'a Channel> {
-		// Check every channel in the response
-		for channel in channels {
-			if unicase::eq(&self.query, &channel.display_name) {
-				return Some(channel);
-			}
-		}
-
-		// If we get here, no channel was found
-		None
 	}
 }
 

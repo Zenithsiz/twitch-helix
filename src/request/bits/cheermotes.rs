@@ -23,7 +23,7 @@ use crate::{helix_url, HelixRequest, HttpMethod};
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub struct Request {
 	/// Broadcaster ID
-	broadcaster_id: String,
+	pub broadcaster_id: String,
 }
 
 impl Request {

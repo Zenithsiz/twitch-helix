@@ -24,7 +24,7 @@ use crate::{helix_url, HelixRequest, HttpMethod};
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub struct Request {
 	/// Broadcaster ID
-	broadcaster_id: String,
+	pub broadcaster_id: String,
 }
 
 impl Request {
@@ -34,39 +34,6 @@ impl Request {
 		Self {
 			broadcaster_id: broadcaster_id.into(),
 		}
-	}
-
-	/// Finds the exact channel requested given the response
-	///
-	/// Attempts to find an exact match in the `display_name`
-	/// field of the channel, without considering case.
-	#[must_use]
-	pub fn channel(&self, channels: Vec<Channel>) -> Option<Channel> {
-		// Check every channel in the response
-		for channel in channels {
-			if unicase::eq(&self.broadcaster_id, &channel.broadcast_id) {
-				return Some(channel);
-			}
-		}
-
-		// If we get here, no channel was found
-		None
-	}
-
-	/// Finds the exact channel requested given the response by reference.
-	///
-	/// See [`Self::channel`] for more information.
-	#[must_use]
-	pub fn channel_ref<'a>(&self, channels: &'a [Channel]) -> Option<&'a Channel> {
-		// Check every channel in the response
-		for channel in channels {
-			if unicase::eq(&self.broadcaster_id, &channel.broadcast_id) {
-				return Some(channel);
-			}
-		}
-
-		// If we get here, no channel was found
-		None
 	}
 }
 

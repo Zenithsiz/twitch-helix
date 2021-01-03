@@ -1,23 +1,23 @@
-//! Extension analytics request
+//! Games analytics request
 
 // Imports
 use super::ReportType;
 use crate::{helix_url, HelixRequest, HttpMethod};
 
-/// Extension analytics request
+/// Games analytics request
 ///
-/// This request uses the `/analytics/extensions` path
-/// to get a url to download extension analytics reports.
+/// This request uses the `/analytics/games` path
+/// to get a url to download game analytics reports.
 ///
 /// # Examples
 /// ```
-/// # use twitch_helix::request::analytics::extensions::Request;
+/// # use twitch_helix::request::analytics::games::Request;
 /// # use twitch_helix::HelixRequest;
 /// let mut request = Request::new();
 ///
 /// let url = request.url();
 /// assert_eq!(url.host_str(), Some("api.twitch.tv"));
-/// assert_eq!(url.path(), "/helix/analytics/extensions");
+/// assert_eq!(url.path(), "/helix/analytics/games");
 /// assert_eq!(url.query(), Some(""));
 /// ```
 #[derive(PartialEq, Eq, Clone, Default, Debug)]
@@ -28,8 +28,8 @@ pub struct Request {
 	/// Ending date/time for returned reports
 	pub ended_at: Option<chrono::DateTime<chrono::Utc>>,
 
-	/// Extension id
-	pub extension_id: Option<String>,
+	/// Game id
+	pub game_id: Option<String>,
 
 	/// Maximum number of objects to return
 	pub first: Option<usize>,
@@ -48,7 +48,7 @@ impl Request {
 		Self {
 			after: None,
 			ended_at: None,
-			extension_id: None,
+			game_id: None,
 			first: None,
 			started_at: None,
 			report_type: None,
@@ -70,11 +70,11 @@ impl Request {
 		}
 	}
 
-	/// Sets the extension id
+	/// Sets the game id
 	#[must_use]
-	pub fn with_extension_id(self, extension_id: String) -> Self {
+	pub fn with_game_id(self, game_id: String) -> Self {
 		Self {
-			extension_id: Some(extension_id),
+			game_id: Some(game_id),
 			..self
 		}
 	}
@@ -109,7 +109,7 @@ impl HelixRequest for Request {
 
 	fn url(&self) -> url::Url {
 		// Append all our arguments if they exist
-		let mut url = helix_url!(analytics / extensions);
+		let mut url = helix_url!(analytics / games);
 
 		{
 			let mut query_pairs = url.query_pairs_mut();
@@ -119,8 +119,8 @@ impl HelixRequest for Request {
 			if let Some(ended_at) = &self.ended_at {
 				query_pairs.append_pair("ended_at", &ended_at.to_rfc3339());
 			}
-			if let Some(extension_id) = &self.extension_id {
-				query_pairs.append_pair("extension_id", extension_id);
+			if let Some(game_id) = &self.game_id {
+				query_pairs.append_pair("game_id", game_id);
 			}
 			if let Some(first) = &self.first {
 				query_pairs.append_pair("first", &first.to_string());
@@ -148,8 +148,8 @@ impl HelixRequest for Request {
 #[derive(PartialEq, Eq, Clone, Debug)]
 #[derive(serde::Serialize, serde::Deserialize)]
 pub struct Report {
-	/// Extension id
-	pub extension_id: String,
+	/// Game id
+	pub game_id: String,
 
 	/// Date range
 	pub date_range: DateRange,

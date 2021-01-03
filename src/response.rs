@@ -96,5 +96,5 @@ pub struct ResponseError {
 #[derive(serde::Serialize, serde::Deserialize)]
 pub struct Pagination {
 	/// Current cursor
-	cursor: String,
+	pub cursor: String,
 }

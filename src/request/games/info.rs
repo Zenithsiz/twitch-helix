@@ -44,59 +44,6 @@ pub enum Request {
 	Name(String),
 }
 
-impl Request {
-	/// Finds the exact game requested given the response
-	///
-	/// Attempts to find an exact match in either the `id` or `name`
-	/// fields of the channel, without considering case.
-	#[must_use]
-	pub fn game(&self, games: Vec<Game>) -> Option<Game> {
-		// Check every game in the response
-		for game in games {
-			match self {
-				Self::Id(id) => {
-					if unicase::eq(id, &game.id) {
-						return Some(game);
-					}
-				}
-				Self::Name(name) => {
-					if unicase::eq(name, &game.name) {
-						return Some(game);
-					}
-				}
-			}
-		}
-
-		// If we get here, no game was found
-		None
-	}
-
-	/// Finds the exact game requested given the response by reference.
-	///
-	/// See [`Self::game`] for more information.
-	#[must_use]
-	pub fn game_ref<'a>(&self, games: &'a [Game]) -> Option<&'a Game> {
-		// Check every game in the response
-		for game in games {
-			match self {
-				Self::Id(id) => {
-					if unicase::eq(id, &game.id) {
-						return Some(game);
-					}
-				}
-				Self::Name(name) => {
-					if unicase::eq(name, &game.name) {
-						return Some(game);
-					}
-				}
-			}
-		}
-
-		// If we get here, no game was found
-		None
-	}
-}
-
 impl HelixRequest for Request {
 	type Response = Vec<Game>;
 

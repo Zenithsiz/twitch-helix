@@ -23,10 +23,10 @@ use crate::{helix_url, HelixRequest, HttpMethod};
 #[derive(PartialEq, Eq, Clone, Debug)]
 pub struct Request {
 	/// Broadcaster ID
-	broadcaster_id: String,
+	pub broadcaster_id: String,
 
 	/// Commercial length
-	length: Length,
+	pub length: Length,
 }
 
 /// A commercial length

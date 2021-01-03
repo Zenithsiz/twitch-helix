@@ -27,7 +27,6 @@ serde = { version = "1.0.118", features = ["derive"] }
 
 # Data
 chrono = { version = "0.4.19", features = ["serde"] }
-unicase = "2.6.0"
 
 [dev-dependencies]
 
