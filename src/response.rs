@@ -1,5 +1,11 @@
 //! Helix responses
 
+// Modules
+pub mod pagination;
+
+// Exports
+pub use pagination::Pagination;
+
 /// Helix response
 ///
 /// Every response from Helix may be an error, of type [`ResponseError`],
@@ -85,16 +91,4 @@ pub struct ResponseError {
 
 	/// Message
 	pub message: String,
-}
-
-/// Response pagination
-///
-/// Represents the current page from the request.
-/// May be fed into some requests to get the next page,
-/// as a linked-list.
-#[derive(PartialEq, Eq, Clone, Debug)]
-#[derive(serde::Serialize, serde::Deserialize)]
-pub struct Pagination {
-	/// Current cursor
-	pub cursor: String,
 }
