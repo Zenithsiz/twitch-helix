@@ -19,22 +19,6 @@ use crate::{helix_url, HelixRequest, HttpMethod};
 /// assert_eq!(url.path(), "/helix/analytics/extension");
 /// assert_eq!(url.query(), Some(""));
 /// ```
-///
-/// Using every argument:
-/// ```
-/// # use twitch_helix::request::search::channel::Request;
-/// # use twitch_helix::HelixRequest;
-/// let now
-/// let mut request = Request::new()
-///   .with_first(100)
-///   .with_after("my-cursor".to_string())
-///   .with_live_only(true);
-///
-/// let url = request.url();
-/// assert_eq!(url.host_str(), Some("api.twitch.tv"));
-/// assert_eq!(url.path(), "/helix/search/channels");
-/// assert_eq!(url.query(), Some("query=my-channel&first=100&after=my-cursor&live_only=true"));
-/// ```
 #[derive(PartialEq, Eq, Clone, Default, Debug)]
 pub struct Request {
 	/// Cursor for forward pagination
